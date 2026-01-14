@@ -5,16 +5,21 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+from dotenv import load_dotenv 
+load_dotenv()
+
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=jyn)p*5a-k&$@zrl&6n&5tuhtbqq##-q=fipcivqr(5un!n4l'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['winner', '*']
 
 
 # Application definition
@@ -30,7 +35,7 @@ INSTALLED_APPS = [
     # apps
     'stores.apps.StoresConfig',
     'users.apps.UsersConfig',
-    'rest_framework'
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -112,3 +117,13 @@ STATIC_URL = 'static/'
 
 MEDIA_URL ='/image/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'image')
+
+
+# EMAIL CONFIG
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # SMTP server host
+EMAIL_HOST_USER = str(os.getenv('EMAIL_HOST_USER'))  # SMTP server username
+EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_HOST_PASSWORD'))  # SMTP server password
+EMAIL_PORT = 465  # SMTP server port (587 for TLS, 465 for SSL)
+EMAIL_USE_SSL = True  # Set to True if using SSL
+
