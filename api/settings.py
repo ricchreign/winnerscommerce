@@ -8,7 +8,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 from dotenv import load_dotenv 
 load_dotenv()
 
+# PAYSTACK KEYS
 
+PAYSTACK_SECRET_KEY = str(os.getenv('PAYSTACK_SECRET_KEY'))
+PAYSTACK_PUBLIC_KEY = str(os.getenv('PAYSTACK_PUBLIC_KEY'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/

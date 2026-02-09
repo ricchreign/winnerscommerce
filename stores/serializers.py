@@ -35,4 +35,14 @@ class OrderSerializer(serializers.ModelSerializer):
 class CheckSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['cart','amount','subtotal','ref','order-status','payment_completed']
+        # fields = [
+        #     'order_by',
+        #     'shipping_address',
+        #     'mobile',
+        #     'email',
+        #     'cart',
+        #     'amount',
+        #     'subtotal',
+        # ]
+        fields = ['cart','amount','mobile','shipping_address','subtotal','ref','order_status','payment_completed']
+        read_only_fields = ['cart', 'subtotal', 'amount']

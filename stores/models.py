@@ -1,6 +1,11 @@
 from django.db import models
+
 from users.models import Profile
+
 import secrets
+
+from . paystack import Paystack
+
 # Create your models here.
 class Category(models.Model):
     title = models.CharField(max_length=50)
@@ -48,14 +53,14 @@ class Cart(models.Model):
 # cartProduct
 class CartProduct(models.Model):
     Cart = models.ForeignKey('CART', on_delete=models.CASCADE)
-    Product = models.ForeignKey('PRODUCT', on_delete=models.CASCADE)
+    product = models.ForeignKey('PRODUCT', on_delete=models.CASCADE)
     quantity = models.BigIntegerField()
     subtotal = models.BigIntegerField()
     created = models.DateTimeField(auto_now_add=True)
 
 
     def __str__(self):
-        return f'CardId -{self.care.id} <===> {self.quantity}'
+        return f'CartId - {self.cart.id} <===> {self.quantity}'
     
 
 # order
@@ -72,7 +77,7 @@ PAYMENT_METHOD =(
 )
 
 class Order(models.Model):
-    Cart = models.ForeignKey('CART', on_delete=models.CASCADE)
+    cart = models.ForeignKey('CART', on_delete=models.CASCADE)
     order_by = models.CharField(max_length=255)
     shipping_address = models.TextField()
     mobile = models.CharField(max_length=50)
@@ -99,3 +104,18 @@ def save(self,*args,**kwargs):
 def amount_value(self)->int:
         self.amount * 100        
 
+
+def verify_payment(self):
+    Paystack = Paystack()
+    status, result = paystack.verify_payment(self.ref)
+    if status and result.get("status") == "success":
+        if result ['amount'] / 100 == self.amount:
+            self.payment_completed = True 
+            self.save()
+            return True
+        if self.payment_completed == True:
+            self.cart = None
+            self.save ()
+            return True
+        return False
+    return False
